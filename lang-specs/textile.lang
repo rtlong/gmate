@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<language _name="Textile" version="1.0" _section="Markup" mimetypes="text/x-textile">
+  <pattern-item _name="Bold" style="Data Type">
+    <regex>(\*[\w \n]+\*)</regex>
+  </pattern-item>
+  
+  <pattern-item _name="Heavy Emphasis" style="Data Type">
+    <regex>(\*{2}[\w \n]+\*{2})</regex>
+  </pattern-item>
+
+  <pattern-item _name="Italics" style="Preprocessor">
+    <regex>(\_[\w \n]+\_)</regex>
+  </pattern-item>
+
+  <pattern-item _name="Emphasis" style="Preprocessor">
+    <regex>(\_{2}[\w \n]+\_{2})</regex>
+  </pattern-item>
+
+  <pattern-item _name="Citation" style="Preprocessor">
+    <regex>(\?{2}[\w \n]+\?{2})</regex>
+  </pattern-item>
+
+  <pattern-item _name="Superscript" style="Preprocessor">
+    <regex>(\^[\w \n]+\^)</regex>
+  </pattern-item>
+
+  <pattern-item _name="Subscript" style="Preprocessor">
+    <regex>(~[\w \n]+~)</regex>
+  </pattern-item>
+
+  <pattern-item _name="Removed Text" style="Preprocessor">
+    <regex>(\-[\S]+\-)</regex>
+  </pattern-item>
+
+  <pattern-item _name="Added Text" style="String">
+    <regex>(\+[\w \n]+\+)</regex>
+  </pattern-item>
+
+  <pattern-item _name="Code" style="String">
+    <regex>(\@[^@]+\@)</regex>
+  </pattern-item>
+
+  <pattern-item _name="Span" style="String">
+    <regex>(\%[\w \n]+\%)</regex>
+  </pattern-item>
+  
+  <pattern-item _name="List item" style="Keyword">
+    <regex>(^ *\*[*#]*[ \t]+)|(^ *\#[*#]*[ \t]+)</regex>
+  </pattern-item>
+
+  <pattern-item _name="Directive" style="Keyword">
+    <regex>(^[\w{}()]+\.)</regex>
+  </pattern-item>
+
+  <pattern-item _name="Footnote" style="Comment">
+    <regex>(\[[0-9]+\])</regex>
+  </pattern-item>
+
+  <pattern-item _name="URL" style="Comment">
+    <regex>(\"[\w \n]+\"\:[\S]+)</regex>
+  </pattern-item>
+
+  <pattern-item _name="Image" style="Comment">
+    <regex>(\![\S]+\!(\:[\S]+)*)</regex>
+  </pattern-item>
+</language>

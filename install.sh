@@ -3,8 +3,8 @@
 # killall gedit
 
 # Try to use sudo
-echo "Type root password if you want to install system wide. Press [Enter] to install to this user only"
-sudo -v
+#echo "Type root password if you want to install system wide. Press [Enter] to install to this user only"
+#sudo -v
 
 if [ $(id -u) = "0" ]; then
   sudo="yes"
@@ -12,14 +12,16 @@ else
   sudo="no"
 fi
 
+# Make it talk
+alias mkdir="mkdir -v"
+alias cp="cp -vl --no-clobber"
+
 # Register rails-related mime types
 if [ $sudo = "yes" ]; then
-  sudo cp mime/rails.xml /usr/share/mime/packages
-  sudo cp mime/cfml.xml /usr/share/mime/packages
+  sudo cp mime/*.xml /usr/share/mime/packages
 else
   mkdir -p ~/.local/share/mime/packages
-  cp mime/rails.xml ~/.local/share/mime/packages
-  cp mime/cfml.xml ~/.local/share/mime/packages
+  cp mime/*.xml ~/.local/share/mime/packages
 fi
 
 # Copy language definitions
@@ -35,8 +37,8 @@ if [ $sudo = "yes" ]; then
   sudo mkdir -p /usr/share/gedit-2/gmate
   sudo cp gmate.py /usr/share/gedit-2/gmate/gmate.py
 else
-  mkdir -p ~/gmate
-  cp gmate.py ~/gmate
+  mkdir -p ~/.bin/
+  cp gmate.py ~/.bin/gmate
 fi
 # Copy Tags
 if [ $sudo = "yes" ]; then
@@ -90,11 +92,11 @@ if [ -f /etc/debian_version ]; then
 fi
 
 # Execute debian postins script
-if [ $sudo = "yes" ]; then
-  `sudo sh ./debian/postinst`
-else
-  `sh ./debian/postinst`
-fi
+#if [ $sudo = "yes" ]; then
+#  `sudo sh ./debian/postinst`
+#else
+#  `sh ./debian/postinst`
+#fi
 
 echo -n "Do you want to activate default plugin and configuration set? [y,N]:"
 read answer
@@ -115,7 +117,7 @@ case "$answer" in
         `gconftool-2 --set /apps/gedit-2/preferences/editor/save/create_backup_copy -t bool false`
         echo "Configuration set."
         ;;
-        *)
+    *)
         echo "No config performed."
         ;;
 esac
