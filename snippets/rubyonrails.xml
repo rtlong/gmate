@@ -1142,12 +1142,12 @@ end]]></text>
   <snippet id="vc">
     <tag>vc</tag>
     <description>validates_confirmation_of</description>
-    <text><![CDATA[validates_confirmation_of :${1:attribute}]]></text>
+    <text><![CDATA[validates :confirmation, :${1:attribute} =>true]]></text>
   </snippet>
   <snippet id="ve">
     <tag>ve</tag>
     <description>validates_exclusion_of</description>
-    <text><![CDATA[validates_exclusion_of :${1:attribute}]]></text>
+    <text><![CDATA[validates :exclusion :${1:attribute}]]></text>
   </snippet>
   <snippet id="verify">
     <tag>verify</tag>
@@ -1169,7 +1169,7 @@ end]]></text>
   <snippet id="vp">
     <tag>vp</tag>
     <description>validates_presence_of</description>
-    <text><![CDATA[validates_presence_of :${1:attribute}]]></text>
+    <text><![CDATA[validates :${1:attribute}, :presence => true]]></text>
   </snippet>
   <snippet id="vpif">
     <tag>vpif</tag>
@@ -1224,7 +1224,7 @@ end]]></text>
     <description>validates_numericality_of</description>
   </snippet>
   <snippet id="vf">
-    <text><![CDATA[validates_format_of :${1:image_url},
+    <text><![CDATA[validates  :format  :${1:image_url},
                     :${2:with}    => $3%r{\.(gif|jpg|png)$}i,
                     :${4:message} => "${5:must be a URL for a GIF, JPG, or PNG image}" $0
 
