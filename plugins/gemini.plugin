@@ -1,0 +1,10 @@
+[Plugin]
+Loader=python
+Module=gemini
+IAge=3
+Name=Gemini Plugin
+Description=Smart completion of common characters we use in pairs. ({["''"] })
+Authors=Gary Haran <gary.haran@gmail.com>
+Copyright=Copyright © 2006 Gary Haran <gary.haran@gmail.com>
+Website=http://www.garyharan.com/
+

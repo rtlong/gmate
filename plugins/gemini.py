@@ -1,53 +1,26 @@
-#        Gedit gemini plugin
-#        Copyright (C) 2005-2006    Gary Haran <gary.haran@gmail.com>
-#
-#        This program is free software; you can redistribute it and/or modify
-#        it under the terms of the GNU General Public License as published by
-#        the Free Software Foundation; either version 2 of the License, or
-#        (at your option) any later version.
-#
-#        This program is distributed in the hope that it will be useful,
-#        but WITHOUT ANY WARRANTY; without even the implied warranty of
-#        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
-#        GNU General Public License for more details.
-#
-#        You should have received a copy of the GNU General Public License
-#        along with this program; if not, write to the Free Software
-#        Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-#        02110-1301  USA
+from gi.repository import GObject, Gedit
 
-import gedit
-import gtk
-import gobject
-import re
-
-class GeminiPlugin( gedit.Plugin):
-    handler_ids = []
+class GeminiViewActivatable (GObject.Object, Gedit.ViewActivatable):
+    __gtype_name__ = "GeditPluginViewActivatable"
+    view = GObject.property(type=Gedit.View)
+    handler_id = 0
 
     def __init__(self):
-        gedit.Plugin.__init__(self)
+        GObject.Object.__init__(self)
 
-    def activate(self, window):
-        view = window.get_active_view()
-        self.setup_gemini (view)
+    def do_activate(self):
+        self.setup_gemini()
 
-    def deactivate(self, window):
-        for (handler_id, view) in self.handler_ids:
-            if view.handler_is_connected(handler_id):
-                view.disconnect(handler_id)
+    def do_deactivate(self):
+        self.view.disconnect(handler_id)
+        
+    def do_update(self):
+        self.setup_gemini()
 
-    def update_ui(self, window):
-        view = window.get_active_view()
-        self.setup_gemini(view)
-
-
-    # Starts auto completion for a given view
-    def setup_gemini(self, view):
-        if type(view) == gedit.View:
-            if getattr(view, 'gemini_instance', False) == False:
-                setattr(view, 'gemini_instance',Gemini())
-                handler_id = view.connect ('key-press-event', view.gemini_instance.key_press_handler)
-                self.handler_ids.append((handler_id, view))
+    def setup_gemini(self):
+        if getattr(self.view, 'gemini_instance', False) == False:
+            setattr(self.view, 'gemini_instance', Gemini())
+            self.handler_id = self.view.connect('key-press-event', self.view.gemini_instance.key_press_handler)
 
 class Gemini:
     start_keyvals = [34, 39, 96, 40, 91, 123]
@@ -60,12 +33,7 @@ class Gemini:
         return
 
     def key_press_handler(self, view, event):
-        if gedit.version > (2, 30, 1):
-            if self.toggle:
-                self.toggle = False
-                return
-            else:
-                self.toggle = True
+        self.toggle = True
         buf = view.get_buffer()
         cursor_mark = buf.get_insert()
         cursor_iter = buf.get_iter_at_mark(cursor_mark)
@@ -74,10 +42,10 @@ class Gemini:
 
             back_iter = cursor_iter.copy()
             back_char = back_iter.backward_char()
-            back_char = buf.get_text(back_iter, cursor_iter)
+            back_char = buf.get_text(back_iter, cursor_iter, 1)
             forward_iter = cursor_iter.copy()
             forward_char = forward_iter.forward_char()
-            forward_char = buf.get_text(cursor_iter, forward_iter)
+            forward_char = buf.get_text(cursor_iter, forward_iter, 1)
 
             if event.keyval in self.start_keyvals:
                 index = self.start_keyvals.index(event.keyval)
