@@ -1,7 +1,7 @@
 from gi.repository import GObject, Gedit
 
 class GeminiViewActivatable (GObject.Object, Gedit.ViewActivatable):
-    __gtype_name__ = "GeditPluginViewActivatable"
+    __gtype_name__ = "GeminiPluginViewActivatable"
     view = GObject.property(type=Gedit.View)
     handler_id = 0
 
