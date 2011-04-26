@@ -1,5 +1,7 @@
 # GMate
 
+### *NOTE*: I'm updating some of the scripts and plugins for use with GNOME 3.
+
 This package contains some gedit improvements to make it more similar to
 TextMate. The package contain code snippets, plugins, and an automatic
 registration of rails-related files.
