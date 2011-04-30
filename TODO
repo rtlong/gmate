@@ -27,5 +27,7 @@ File Search.
 DONE:
 
 * Styles
+* Mime types
 * Plugins:
   * Gemini
+  * Rails File Loader

@@ -12,7 +12,7 @@ class GeminiViewActivatable (GObject.Object, Gedit.ViewActivatable):
         self.setup_gemini()
 
     def do_deactivate(self):
-        self.view.disconnect(handler_id)
+        self.view.disconnect(self.handler_id)
         
     def do_update_state(self):
         self.setup_gemini()
