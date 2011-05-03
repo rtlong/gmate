@@ -4,49 +4,32 @@
 # Save document when losing focus.
 # Gautier Portet <kassoulet gmail.com>
 
+from gi.repository import GObject, Gtk, Gdk, Gedit
 
-import gedit
-import tempfile
+class FocusAutoSavePlugin(GObject.Object, Gedit.WindowActivatable):
+    __gtype_name__ = "FocusAutoSavePlugin"
 
-class AutosaveWindow:
-    def __init__(self, plugin, window):
-        self.window = window
-        self.plugin = plugin
+    window = GObject.property(type=Gedit.Window)
 
-        self.window.connect("focus-out-event", self.on_focus_out_event)
-
-    def deactivate(self):
-        self.window = None
-        self.plugin = None
-
-    def update_ui(self):
-        # Called whenever the window has been updated (active tab
-        # changed, etc.)
-        pass
+    def __init__(self):
+        GObject.Object.__init__(self)
 
     def on_focus_out_event(self, widget, focus):
         for doc in self.window.get_unsaved_documents():
-            uri = doc.get_uri()
-            print uri
-            if uri is None:
-                temp_fd, temp_path = tempfile.mkstemp(".txt","gedit-unsaved-")
-                print 'temp:', temp_path
-                doc.save_as("file://" + temp_path, doc.get_encoding(),0)
+            if doc.is_untouched():
+                continue
+            if doc.get_location() is None:
+                continue
             doc.save(0)
 
+    def do_activate(self):
+        self.signal = self.window.connect("focus-out-event", self.on_focus_out_event)
 
-class AutosavePlugin(gedit.Plugin):
-    def __init__(self):
-        gedit.Plugin.__init__(self)
-        self.instances = {}
+    def do_deactivate(self):
+        self.window.disconnect(self.signal)
+        del self.signal
 
-    def activate(self, window):
-        self.instances[window] = AutosaveWindow(self, window)
+    def do_update_state(self):
+        pass
 
-    def deactivate(self, window):
-        self.instances[window].deactivate()
-        del self.instances[window]
-
-    def update_ui(self, window):
-        self.instances[window].update_ui()
 
