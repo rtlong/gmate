@@ -76,8 +76,8 @@ default_indent_config = {
     "php_indent_regex"                  : r'\s*(((if|while|else\s*(if)?|for(each)?|switch|declare)\s*\(.*\)[^{:;]*)|(do\s*[^\({:;]*))',
     "php_unindent_regex"                : r'^.*(default:\s*|case.*:.*)$',
     "php_unindent_keystrokes"           : ':',
-        
-    
+
+
     "sass_indent_regex"                 : r'(?!^\s*$)(?!^\s*(@|\+|\*|/\*|//))(^\s*?[^:=]+?(?<!,)$)',
     "sass_unindent_regex"               : r'', # XXX E.g., on blank line? (r'^\s*$')
     "sass_unindent_keystrokes"          : '',
@@ -186,12 +186,12 @@ class SmartIndentPluginView(GObject.Object, Gedit.ViewActivatable):
 
     def do_activate(self):
         self.setup_smart_indent()
-      
+
     def do_deactivate(self):
         self.view.disconnect(self.handler_id)
 
     def do_update_state(self):
-        self.setup_smart_ident()      
+        self.setup_smart_ident()
 
     def setup_smart_indent(self):
         document = self.view.get_buffer()
@@ -438,7 +438,7 @@ class SmartIndent:
                         line_start_iter = cursor_iter.copy()
                         view.backward_display_line_start(line_start_iter)
                         iter_end_del = buf.get_iter_at_offset(line_start_iter.get_offset() + len(indent_width))
-                        text = buf.get_text(line_start_iter, iter_end_del)
+                        text = buf.get_text(line_start_iter, iter_end_del, True)
                         if text.strip() == '':
                             buf.delete_interactive(line_start_iter, iter_end_del, True)
                             self.__line_unindented = self.__line_no

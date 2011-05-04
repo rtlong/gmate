@@ -19,32 +19,25 @@
 from gi.repository import GObject, Gedit, GtkSource
 import os
 
-class RubyOnRailsLoader(GObject.Object, Gedit.WindowActivatable):
-
-    __gtype_name__ = "RubyOnRailsPluginWindowActivatable"
-    window = GObject.property(type=Gedit.Window)
+class RubyOnRailsLoaderView(GObject.Object, Gedit.ViewActivatable):
+    __gtype_name__ = "RubyOnRailsPluginViewActivatable"
+    view = GObject.property(type=Gedit.View)
 
     def __init__(self):
         GObject.Object.__init__(self)
 
     def do_activate(self):
-        handler_id = self.window.connect("tab-added", self.on_window_tab_added)
-        self.window.set_data(self.__class__.__name__, handler_id)
-        for doc in self.window.get_documents():
-            self.connect_document(doc)
-
-    def connect_document(self, doc):
-        handler_id = doc.connect("loaded", self.on_document_load)
-        doc.set_data(self.__class__.__name__, handler_id)
+        self.connect_document()
 
     def do_deactivate(self):
-        handler_id = self.window.get_data(self.__class__.__name__)
-        self.window.disconnect(handler_id)
-        self.window.set_data(self.__class__.__name__, None)
+        document = self.view.get_buffer()
+        document.disconnect(document.get_data(self.__class__.__name__))
+        document.set_data(self.__class__.__name__, None)
 
-    def on_window_tab_added(self, window, tab):
-        doc = tab.get_document()
-        self.connect_document(doc)
+    def connect_document(self):
+        document = self.view.get_buffer()
+        handler_id = document.connect("loaded", self.on_document_load)
+        document.set_data(self.__class__.__name__, handler_id)
 
     def on_document_load(self, doc, *args):
         language = doc.get_language()
@@ -58,7 +51,7 @@ class RubyOnRailsLoader(GObject.Object, Gedit.WindowActivatable):
                     self.window.get_ui_manager().ensure_update()
 
     def get_in_rails(self, uri):
-        rails_root = self.get_data('RailsLoaderRoot')
+        rails_root = self.view.get_data('RailsLoaderRoot')
         if rails_root:
             return rails_root
         base_dir = os.path.dirname(uri)
@@ -74,15 +67,7 @@ class RubyOnRailsLoader(GObject.Object, Gedit.WindowActivatable):
             else:
                 base_dir = os.path.abspath(os.path.join(base_dir, '..'))
         if rails_root:
-            self.set_data('RailsLoaderRoot', rails_root)
+            self.view.set_data('RailsLoaderRoot', rails_root)
             return True
         return False
-
-
-    def set_data(self, name, value):
-        self.window.get_active_tab().get_view().set_data(name, value)
-
-
-    def get_data(self, name):
-        return self.window.get_active_tab().get_view().get_data(name)
 

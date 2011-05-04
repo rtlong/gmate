@@ -38,7 +38,9 @@ class SaveWithoutTrailingSpacePlugin(GObject.Object, Gedit.ViewActivatable):
         doc.set_data(self.__class__.__name__, handler_id)
 
     def do_deactivate(self):
+        doc = self.view.get_buffer()
         doc.disconnect(doc.get_data(self.__class__.__name__))
+        doc.set_data(self.__class__.__name__, None)
 
     def on_document_saving(self, doc, *args):
         #Strip trailing spaces in document.
