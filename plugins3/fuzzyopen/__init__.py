@@ -1,0 +1,29 @@
+from gi.repository import GObject, Gedit
+
+from fuzzyopen import FuzzyOpenPluginInstance
+from config import FuzzyOpenConfigWindow
+
+# STANDARD PLUMBING
+class FuzzyOpenPlugin(GObject.Object, Gedit.WindowActivatable):
+    __gname_type__ = "FuzzyOpenPluginWindowActivatable"
+    window = GObject.property(type=Gedit.Window)
+
+    def __init__(self):
+        GObject.Object.__init__(self)
+
+    def is_configurable(self):
+        return True
+
+    def do_create_configure_dialog(self):
+        return FuzzyOpenConfigWindow()._window
+
+    def do_activate(self):
+        self.instance = FuzzyOpenPluginInstance(self)
+
+    def do_deactivate(self):
+        self.instance.deactivate()
+
+    def do_update_state(self):
+        pass
+#        self.instance.update_ui
+

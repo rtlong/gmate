@@ -12,7 +12,7 @@ import os
 
 #GLADE_FILE = os.path.join(os.path.dirname(__file__), "dialog.glade")
 
-DEFAULT_TAB_SIZE = 6
+DEFAULT_TAB_SIZE = 8
 DEFAULT_USE_SPACES = True
 
 default_indent_config = {
@@ -189,18 +189,31 @@ class SmartIndentPluginView(GObject.Object, Gedit.ViewActivatable):
 
     def do_deactivate(self):
         self.view.disconnect(self.handler_id)
+        self.view.get_buffer().disconnect(self.doc_handler_id)
 
     def do_update_state(self):
         self.setup_smart_ident()
+        self.window.get_ui_manager().ensure_update()
 
     def setup_smart_indent(self):
         document = self.view.get_buffer()
-        if document.get_language() != None:
+        if document.get_language() is not None:
             self.lang = document.get_language().get_id()
-
         if getattr(self.view, 'smart_indent_instance', False) == False:
             setattr(self.view, 'smart_indent_instance', SmartIndent())
-            self.handler_id = self.view.connect('key-press-event', self.view.smart_indent_instance.key_press_handler)
+        self.register_keypress()
+        self.on_document_load()
+
+    def on_document_load(self):
+        self.doc_handler_id = self.view.get_buffer().connect('loaded', self.set_language_on_load)
+
+    def register_keypress(self):
+        self.handler_id = self.view.connect('key-press-event', self.view.smart_indent_instance.key_press_handler)
+
+    def set_language_on_load(self, doc, *args):
+        lang = doc.get_language()
+        if lang is not None:
+            self.lang = lang.get_id()
         self.view.smart_indent_instance.set_language(self.lang, self.view)
 
 class ConfigurationWindowHelper:
@@ -209,7 +222,6 @@ class ConfigurationWindowHelper:
         self.window = window
         self.plugin = plugin
         self.dialog = None
-
 
     def configuration_dialog(self):
         glade_xml = Gtk.Blade.add_from_file(GLADE_FILE)
