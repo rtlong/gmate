@@ -1,8 +1,6 @@
 from gi.repository import Gedit, Gtk, Gio, Gdk, GdkPixbuf
-#import gconf
-#import pygtk
-#pygtk.require('2.0')
 import os, os.path
+
 from urllib import pathname2url, url2pathname
 from suggestion import FuzzySuggestion
 from util import debug
@@ -31,7 +29,7 @@ class FuzzyOpenPluginInstance:
         self._rootdir = "file://" + self._rootpath
         self._show_hidden = False
         self._suggestion = None
-        self._git = False
+        self._git = True
         self._liststore = None
         self._last_pattern = ""
         self._init_glade()
@@ -39,34 +37,29 @@ class FuzzyOpenPluginInstance:
         self.connect_to_fb_bus()
 
     def deactivate( self ):
+        self.disconnect_from_fb_bus()
         self._remove_menu()
         self._action_group = None
+        self._liststore = None;
         self._window = None
         self._plugin = None
-        self._liststore = None;
-        self._window.get_message_bus().disconnect(self._file_handler_id)
-
-    def update_ui( self ):
-        self._window.get_ui_manager().ensure_update()
 
     # MENU STUFF
     def _insert_menu( self ):
         manager = self._window.get_ui_manager()
-        self._action_group = Gtk.ActionGroup( "FuzzyOpenPluginActions" )
-        fuzzyopen_menu_action = Gtk.Action( name="FuzzyOpenMenuAction", label="Fuzzy", tooltip="Fuzzy tools", stock_id=None )
-        self._action_group.add_action( fuzzyopen_menu_action )
-        fuzzyopen_action = Gtk.Action( name="FuzzyOpenAction", label="Fuzzy Open...\t", tooltip="Open file by autocomplete...", stock_id=Gtk.STOCK_JUMP_TO )
+        self._action_group = Gtk.ActionGroup("FuzzyOpenPluginActions")
+        fuzzyopen_action = Gtk.Action(name="FuzzyOpenAction", label="Fuzzy Open...\t", tooltip="Open file by autocomplete...", stock_id=Gtk.STOCK_JUMP_TO)
         fuzzyopen_action.connect( "activate", lambda a: self.on_fuzzyopen_action() )
-        self._action_group.add_action_with_accel( fuzzyopen_action, "<Ctrl><Shift>o" )
-        manager.insert_action_group( self._action_group, 0 )
-        self._ui_id = manager.new_merge_id()
-        manager.add_ui_from_string( ui_str )
+        self._action_group.add_action_with_accel(fuzzyopen_action, "<Ctrl><Shift>o")
+        manager.insert_action_group(self._action_group)
+        self._ui_id = manager.add_ui_from_string(ui_str)
         manager.ensure_update()
 
     def _remove_menu( self ):
         manager = self._window.get_ui_manager()
-        manager.remove_ui( self._ui_id )
-        manager.remove_action_group( self._action_group )
+        manager.remove_ui(self._ui_id)
+        manager.remove_action_group(self._action_group)
+        manager.ensure_update()
 
     # UI DIALOGUES
     def _init_glade( self ):
@@ -131,8 +124,10 @@ class FuzzyOpenPluginInstance:
     #on menuitem activation (incl. shortcut)
     def on_fuzzyopen_action(self):
         if self._file_handler_id is not None:
-            # Until I learn how to access GSettings this is moot.
-            # self._show_hidden =
+            try:
+                self._show_hidden = util.gsettings_fb('filter-mode').index('hide-hidden') >= 0
+            except:
+                self._show_hidden = True
             self._fuzzyopen_window.set_title(app_string + " (File Browser root)")
         else:
             self._fuzzyopen_window.set_title(app_string + " (Working dir): " + self._rootdir)
@@ -145,6 +140,10 @@ class FuzzyOpenPluginInstance:
     def connect_to_fb_bus(self):
         bus = self._window.get_message_bus()
         self._file_handler_id = bus.connect('/plugins/filebrowser', 'root_changed', self.set_rootdir, None)
+
+    def disconnect_from_fb_bus(self):
+        bus = self._window.get_message_bus()
+        bus.disconnect(self._file_handler_id)
 
     def set_rootdir(self, bus, location, user_data):
         self._rootdir = location.props.location.get_uri()

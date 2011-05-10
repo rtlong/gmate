@@ -1,10 +1,10 @@
 """
     Class for suggestions
 """
+from gi.repository import Gio, Gtk
 
 import os
 import subprocess
-from gi.repository import Gio, Gtk
 from util import debug
 import util
 
@@ -14,10 +14,10 @@ class FuzzySuggestion:
   def __init__( self, filepath, show_hidden=False, git=False ):
     self._filepath = filepath
     self._show_hidden = show_hidden
-    self._git = git and util.config('use_git')
-    self._excluded = util.config('ignore_ext').split(',')
-    self._ignore_case = util.config('ignore_case')
-    self._ignore_space = util.config('ignore_space')
+    self._git = git and True
+    self._excluded = "jpg,jpeg,gif,png,tif,psd,pyc".split(',')
+    self._ignore_case = True
+    self._ignore_space = True
     if self._git:
       self._load_git()
     self._load_file()

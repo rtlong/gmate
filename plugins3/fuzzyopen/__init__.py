@@ -11,12 +11,6 @@ class FuzzyOpenPlugin(GObject.Object, Gedit.WindowActivatable):
     def __init__(self):
         GObject.Object.__init__(self)
 
-    def is_configurable(self):
-        return True
-
-    def do_create_configure_dialog(self):
-        return FuzzyOpenConfigWindow()._window
-
     def do_activate(self):
         self.instance = FuzzyOpenPluginInstance(self)
 
@@ -25,5 +19,4 @@ class FuzzyOpenPlugin(GObject.Object, Gedit.WindowActivatable):
 
     def do_update_state(self):
         pass
-#        self.instance.update_ui
 

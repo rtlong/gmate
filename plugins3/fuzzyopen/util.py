@@ -1,11 +1,17 @@
 """
     Utility functions
 """
-
 from datetime import datetime
-from gi.repository import GConf
+from gi.repository import Gio
 import os
 
+def gsettings_fb(name):
+    settings = Gio.Settings('org.gnome.gedit.plugins.filebrowser')
+    lambda_get = [settings.get_strv]
+    key = ['filter_mode']
+    index = key.index(name)
+    return lambda_get[index](name)
+"""
 def config(name, value=None):
   base = lambda x: u'/apps/gedit-2/plugins/fuzzyopen/%s' % x
   client = GConf.Client.get_default()
@@ -52,6 +58,7 @@ def filebrowser_root():
     return (val.get_string(), (fbfilter.find("hidden") == -1))
   else:
     return ['']
+"""
 
 def debug(string):
     #print "[DEBUG]: " + string
