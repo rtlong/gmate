@@ -177,5 +177,6 @@ class FuzzyOpenPluginInstance:
     #opens (or switches to) the given file
     def _open_file( self, filename ):
         uri = self._rootdir + "/" + pathname2url(filename)
-        Gedit.commands_load_location(self._window, uri, self._encoding)
+        openfile = Gio.file_new_for_uri(uri)
+        Gedit.commands_load_location(self._window, openfile, self._encoding, -1, -1)
 
