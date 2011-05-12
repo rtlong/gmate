@@ -14,7 +14,7 @@ class MultiEditViewActivatable (GObject.Object, Gedit.ViewActivatable):
         self.view.get_data('me_instance').do_activate()
 
     def do_deactivate(self):
-        self.view.get_data('me_instance').do_activate()
+        self.view.get_data('me_instance').do_deactivate()
         self.view.set_data('me_instance', None)
 
     def do_update_state(self):

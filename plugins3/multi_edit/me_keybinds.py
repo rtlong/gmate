@@ -1,25 +1,26 @@
 from gi.repository import Gdk
+import csv
 
 class MultiEditKeybinds:
 
-
-    columns_always_avail = True
+    columns_always_available = True
     sc_auto_increment_str = '\n'.join(('- abc:a', '_ abc:A','= abc:z','+ abc:Z',
                             '0 num:0,1',') num:1,1',
                             'x list:"This","is","an","example",";)",""',))
     sc_add_mark_str = 'r'
     sc_level_marks_str = 'l'
-    sc_temp_increment_marks = 'i'
+    sc_temp_increment_mark_str = 'i'
     sc_vertical_mark_str = {
             'up': 'Page_Up',
             'down': 'Page_Down',
             'smart_up': 's+Page_Up',
             'smart_down': 's+Page_Down',
         }
+
     def __init__(self):
         self._set_shortcut_keyvals()
 
-    def _get_keyval(string):
+    def _get_keyval(self, string):
         if len(string) == 1:
             return (Gdk.unicode_to_keyval(ord(unicode(string))), None)
         if len(string) > 1:
@@ -34,15 +35,15 @@ class MultiEditKeybinds:
             return (0, None)
 
     def _set_shortcut_keyvals(self):
-        self.add_mark = self._get_keyval(self.add_mark_str)
-        self.level_marks = self._get_keyval(self.sc_level_marks_str))
+        self.add_mark = self._get_keyval(self.sc_add_mark_str)
+        self.level_marks = self._get_keyval(self.sc_level_marks_str)
         self.temp_incr = self._get_keyval(self.sc_temp_increment_mark_str)
         self.auto_incr = self._parse_sc_auto_incr(self.sc_auto_increment_str)
-        self.mark_vert = {
-            'up': self._get_keyval(self._sc_mark_vert_str['up']),
-            'down': self._get_keyval(self._sc_mark_vert_str['down']),
-            'smart_up': self._get_keyval(self._sc_mark_vert_str['smart_up']),
-            'smart_down': self._get_keyval(self._sc_mark_vert_str['smart_down']),
+        self.vertical_mark = {
+            'up': self._get_keyval(self.sc_vertical_mark_str['up']),
+            'down': self._get_keyval(self.sc_vertical_mark_str['down']),
+            'smart_up': self._get_keyval(self.sc_vertical_mark_str['smart_up']),
+            'smart_down': self._get_keyval(self.sc_vertical_mark_str['smart_down']),
         }
 
     def _parse_sc_auto_incr(self, string):
