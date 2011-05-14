@@ -8,7 +8,7 @@ import os
 def gsettings_fb(name):
     settings = Gio.Settings('org.gnome.gedit.plugins.filebrowser')
     lambda_get = [settings.get_strv]
-    key = ['filter_mode']
+    key = ['filter-mode']
     index = key.index(name)
     return lambda_get[index](name)
 """
