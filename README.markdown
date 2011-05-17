@@ -11,6 +11,8 @@ Migrated right now (without support for settings):
 * Rails File Loader
 * Zencoding
 * Smart Indent
+* Find In Files
+* Text Tools
 
 This package contains some gedit improvements to make it more similar to
 TextMate. The package contain code snippets, plugins, and an automatic
