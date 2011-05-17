@@ -48,7 +48,7 @@ class RubyOnRailsLoaderView(GObject.Object, Gedit.ViewActivatable):
                 if self.get_in_rails(uri):
                     lang = GtkSource.LanguageManager.get_default().get_language('rubyonrails')
                     doc.set_language(lang)
-                    self.window.get_ui_manager().ensure_update()
+                    self.view.get_toplevel().get_ui_manager().ensure_update()
 
     def get_in_rails(self, uri):
         rails_root = self.view.get_data('RailsLoaderRoot')

@@ -12,6 +12,12 @@ if [ ! -d $HOME/.config/gedit/styles ]; then
 fi
 cp styles/* $HOME/.config/gedit/styles
 
+# Copy Snippets
+if [ ! -d $HOME/.config/gedit/snippets ]; then
+	mkdir -p $HOME/.config/gedit/snippets
+fi
+cp snippets/* $HOME/.config/gedit/snippets
+
 # Copy Language Specs
 if [ ! -d $HOME/.local/share/gtksourceview-3.0/language-specs ]; then
   mkdir -p $HOME/.local/share/gtksourceview-3.0/language-specs
