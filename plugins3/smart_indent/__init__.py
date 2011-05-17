@@ -6,14 +6,15 @@
 #
 # See LICENTE.TXT for licence information
 
-from gi.repository import Gedit, GObject, Gtk
+from gi.repository import Gedit, GObject, Gtk, Gio
 import re
 import os
 
 #GLADE_FILE = os.path.join(os.path.dirname(__file__), "dialog.glade")
+settings = Gio.Settings('org.gnome.gedit.preferences.editor')
 
-DEFAULT_TAB_SIZE = 8
-DEFAULT_USE_SPACES = True
+DEFAULT_TAB_SIZE = settings.get_value('tabs-size').get_uint32()
+DEFAULT_USE_SPACES = settings.get_boolean('insert-spaces')
 
 default_indent_config = {
     "c_indent_regex"                    : r'(?!^\s*(#|//)).*(\b(if|while|for)\s*\(.*\)|\b(else|do)\b)[^{;]*$',
