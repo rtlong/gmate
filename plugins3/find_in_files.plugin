@@ -1,0 +1,12 @@
+[Plugin]
+Loader=python
+Module=find_in_files
+IAge=3
+Name=Find In Files
+Name[ru]=Поиск в файлах
+Description=Search within files of your filebrowser root.
+Description[ru]=Поиск по файлам из корня обозревателя файлов.
+Authors=Mike Doty <mike@psyguygames.com>, Vince Wadhwani <vince@econify.com>
+Copyright=© Mike Doty 2007-2008
+Websites=http://www.gedit.org/
+
