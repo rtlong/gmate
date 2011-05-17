@@ -11,12 +11,13 @@ Migrated right now (without support for settings):
 * Zencoding
 * Smart Indent
 * Find In Files
-* Text Tools
+* Text Tools (need some reword on accels to not conflict with multiedit)
 
 Removed plugins:
 
 * Gemini: there's a oficial plugin named Brack Completion that does the job. In ArchLinux it's available on the gedit-plugins package
-
+* Word completion: Same as above
+* Multiedit: same as above
 
 
 This package contains some gedit improvements to make it more similar to
