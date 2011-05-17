@@ -7,12 +7,17 @@
 Migrated right now (without support for settings):
 
 * FuzzyOpen (using GeditMessageBus to connect to filebrowser)
-* Gemini
 * Rails File Loader
 * Zencoding
 * Smart Indent
 * Find In Files
 * Text Tools
+
+Removed plugins:
+
+* Gemini: there's a oficial plugin named Brack Completion that does the job. In ArchLinux it's available on the gedit-plugins package
+
+
 
 This package contains some gedit improvements to make it more similar to
 TextMate. The package contain code snippets, plugins, and an automatic
