@@ -1,0 +1,9 @@
+[Gedit Plugin]
+Loader=python
+Module=rewrap
+IAge=2
+Name=Rewrap
+Description=Re-wraps selected lines of text to within gedit margin. (Version 1.1.0)
+Authors=Derek Veit <dv8box-goo@yahoo.com>
+Copyright=Copyright © 2010 Derek Veit
+Website=http://code.google.com/p/gedit-rewrap

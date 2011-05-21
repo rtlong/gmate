@@ -14,7 +14,7 @@
 
 # Make it talk
 alias mkdir="mkdir -v"
-alias cp="cp --verbose --backup --interactive --suffix=.bak"
+alias cp="cp --verbose --backup  --suffix=.bak"
 
 # Register rails-related mime types
 if [ $sudo = "yes" ]; then

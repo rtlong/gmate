@@ -1,0 +1,17 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=Execute this file
+# Shortcut=<Control><Alt>x
+# Languages=
+# Applicability=titled
+# Output=output-panel
+# Input=nothing
+# Save-files=document
+
+
+echo $UID
+if [ -x $GEDIT_CURRENT_DOCUMENT_PATH ]; then
+	$GEDIT_CURRENT_DOCUMENT_PATH
+else
+	echo "This file is not executable"
+fi
