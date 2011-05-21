@@ -19,9 +19,11 @@ alias cp="cp --verbose --backup  --suffix=.bak"
 # Register rails-related mime types
 if [ $sudo = "yes" ]; then
   sudo cp mime/*.xml /usr/share/mime/packages
+  sudo update-mime-database /usr/share/mime
 else
   mkdir -p ~/.local/share/mime/packages
   cp mime/*.xml ~/.local/share/mime/packages
+  update-mime-database ~/.local/share/mime
 fi
 
 # Copy language definitions
@@ -48,13 +50,6 @@ if [ $sudo = "yes" ]; then
 else
   mkdir -p ~/.gnome2/gedit/taglist/
   cp tags/*.tags.gz ~/.gnome2/gedit/taglist/
-fi
-
-# Update mime type database
-if [ $sudo = "yes" ]; then
-  sudo update-mime-database /usr/share/mime
-else
-  update-mime-database ~/.local/share/mime
 fi
 
 # Copy gedit facilities
