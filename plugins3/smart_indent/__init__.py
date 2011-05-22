@@ -6,53 +6,14 @@
 #
 # See LICENTE.TXT for licence information
 
-import gedit
-import gtk
-import gtk.glade
-import gobject
-import gconf
+from gi.repository import Gedit, GObject, Gtk
 import re
 import os
 
-GLADE_FILE = os.path.join(os.path.dirname(__file__), "dialog.glade")
+#GLADE_FILE = os.path.join(os.path.dirname(__file__), "dialog.glade")
 
-default_tab_size_key   = "/apps/gedit-2/preferences/editor/tabs/tabs_size"
-default_use_spaces_key = "/apps/gedit-2/preferences/editor/tabs/insert_spaces"
-
-gconf_base_uri = u"/apps/gedit-2/plugins/smart_indent"
-config_client = gconf.client_get_default()
-config_client.add_dir(gconf_base_uri, gconf.CLIENT_PRELOAD_NONE)
-
-DEFAULT_USE_SPACES = config_client.get(default_use_spaces_key)
-if DEFAULT_USE_SPACES:
-    DEFAULT_USE_SPACES = DEFAULT_USE_SPACES.get_bool()
-else:
-    DEFAULT_USE_SPACES = True # if setting not set default is True
-DEFAULT_TAB_SIZE   = config_client.get_int(default_tab_size_key) or 4
-
-
-size_key_str       = "%s_tab_size"
-space_key_str      = "%s_use_space"
-indent_key_str     = "%s_indent_regex"
-unindent_key_str   = "%s_unindent_regex"
-keystrokes_key_str = "%s_unindent_keystrokes"
-
-# Trailsave Plugin Config
-crop_spaces_eol_key_str        = "%s_crop_spaces_eol"
-insert_newline_eof_key_str     = "%s_insert_newline_eof"
-remove_blank_lines_eol_key_str = "%s_remove_blank_lines_eol"
-
-user_interface = """
-<ui>
-    <menubar name="MenuBar">
-        <menu name="EditMenu" action="Edit">
-            <placeholder name='EditOps_6'>
-                <menuitem name="Smart Indent Configuration" action="SmartIndentConfiguration"/>
-            </placeholder>
-        </menu>
-    </menubar>
-</ui>
-"""
+DEFAULT_TAB_SIZE = 6
+DEFAULT_USE_SPACES = True
 
 default_indent_config = {
     "c_indent_regex"                    : r'(?!^\s*(#|//)).*(\b(if|while|for)\s*\(.*\)|\b(else|do)\b)[^{;]*$',
@@ -86,6 +47,7 @@ default_indent_config = {
     "python_indent_regex"               : r'\s*[^#]{3,}:\s*(#.*)?',
     "python_unindent_regex"             : r'^\s*(else|elif\s.*|except(\s.*)?|finally)\s*:',
     "python_unindent_keystrokes"        : ':',
+    "python_tab_size"                   : 4,
 
     "javascript_indent_regex"           : r'\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)',
     "javascript_unindent_regex"         : r'^.*(default:\s*|case.*:.*)$',
@@ -114,26 +76,65 @@ default_indent_config = {
     "php_indent_regex"                  : r'\s*(((if|while|else\s*(if)?|for(each)?|switch|declare)\s*\(.*\)[^{:;]*)|(do\s*[^\({:;]*))',
     "php_unindent_regex"                : r'^.*(default:\s*|case.*:.*)$',
     "php_unindent_keystrokes"           : ':',
-
-
+        
+    
     "sass_indent_regex"                 : r'(?!^\s*$)(?!^\s*(@|\+|\*|/\*|//))(^\s*?[^:=]+?(?<!,)$)',
     "sass_unindent_regex"               : r'', # XXX E.g., on blank line? (r'^\s*$')
     "sass_unindent_keystrokes"          : '',
     "sass_use_space"                    : True,
     "sass_tab_size"                     : 2
-
-    # Regex taken from jEdit CoffeeScript mode, kudos to Dennis Hotson https://github.com/dhotson/coffeescript-jedit
-    "coffee_indent_regex"                 : r'(?!^\s*$)(?!^\s*(@|\+|\*|/\*|//))(^\s*?[^:=]+?(?<!,)$)',
-    "coffee_unindent_regex"               : r'^\s*(else|catch|finally)(\s*|\s+.*)$',
-    "coffee_unindent_keystrokes"          : '',
-    "coffee_use_space"                    : True,
-    "coffee_tab_size"                     : 2
 }
 
+size_key_str       = "%s_tab_size"
+space_key_str      = "%s_use_space"
+indent_key_str     = "%s_indent_regex"
+unindent_key_str   = "%s_unindent_regex"
+keystrokes_key_str = "%s_unindent_keystrokes"
+
+# Trailsave Plugin Config
+crop_spaces_eol_key_str        = "%s_crop_spaces_eol"
+insert_newline_eof_key_str     = "%s_insert_newline_eof"
+remove_blank_lines_eol_key_str = "%s_remove_blank_lines_eol"
+
+'''
+import gtk.glade
+import gconf
+
+
+default_tab_size_key   = "/apps/gedit-2/preferences/editor/tabs/tabs_size"
+default_use_spaces_key = "/apps/gedit-2/preferences/editor/tabs/insert_spaces"
+
+gconf_base_uri = u"/apps/gedit-2/plugins/smart_indent"
+config_client = gconf.client_get_default()
+config_client.add_dir(gconf_base_uri, gconf.CLIENT_PRELOAD_NONE)
+
+DEFAULT_USE_SPACES = config_client.get(default_use_spaces_key)
+if DEFAULT_USE_SPACES:
+    DEFAULT_USE_SPACES = DEFAULT_USE_SPACES.get_bool()
+else:
+    DEFAULT_USE_SPACES = True # if setting not set default is True
+DEFAULT_TAB_SIZE   = config_client.get_int(default_tab_size_key) or 4
+
+
+
+
+user_interface = """
+<ui>
+    <menubar name="MenuBar">
+        <menu name="EditMenu" action="Edit">
+            <placeholder name='EditOps_6'>
+                <menuitem name="Smart Indent Configuration" action="SmartIndentConfiguration"/>
+            </placeholder>
+        </menu>
+    </menubar>
+</ui>
+"""
+'''
 
 def get_config(key, lang, setting_type, default, other_storage=None):
     key = key % lang
-    value = config_client.get(os.path.join(gconf_base_uri, key))
+#    value = config_client.get(os.path.join(gconf_base_uri, key))
+    value = None
     if value is None:
         if other_storage:
             value = other_storage.get(key)
@@ -155,7 +156,6 @@ get_unindent_keystrokes = lambda lang: get_indent_config(keystrokes_key_str, lan
 get_use_spaces = lambda lang: get_indent_config(space_key_str, lang, 'bool', DEFAULT_USE_SPACES)
 get_tab_size = lambda lang: get_indent_config(size_key_str, lang, 'int', DEFAULT_TAB_SIZE)
 
-
 # TrailSave Plugin -------------------------------------------------------------
 
 def get_trail_config(lang, key_str):
@@ -175,105 +175,33 @@ def get_remove_blanklines_eof(lang):
 
 # ------------------------------------------------------------------------------
 
-class SmartIndentPlugin(gedit.Plugin):
-    handler_ids = []
+class SmartIndentPluginView(GObject.Object, Gedit.ViewActivatable):
+    __gtype_name__ = "SmartIndentPluginViewActivatable"
+    view = GObject.property(type=Gedit.View)
+    handler_id = None
+    lang = 'plain_text'
 
     def __init__(self):
-        gedit.Plugin.__init__(self)
-        self.instances = {}
+        GObject.Object.__init__(self)
 
+    def do_activate(self):
+        self.setup_smart_indent()
+      
+    def do_deactivate(self):
+        self.view.disconnect(self.handler_id)
 
-    def activate(self, window):
-        view = window.get_active_view()
+    def do_update_state(self):
+        self.setup_smart_ident()      
 
-        # Do statusbar stuff only if gedit version is bellow 2.25
-        self.do_setup_statusbar_stuff = gedit.version < (2,25,0)
-        self.DATA_TAG = 'LanguageStatusFrameWidget'
-        if self.do_setup_statusbar_stuff:
-            self.statusbar = window.get_statusbar()
-            self.frame = self.statusbar.get_data(self.DATA_TAG)
-            if self.frame is None:
-                self.status_label = gtk.Label('')
-                self.frame = gtk.Frame()
-                self.status_label.set_alignment(0, 0)
-                self.status_label.show()
-                self.frame.add(self.status_label)
-                self.frame.show()
-                self.statusbar.pack_end(self.frame, False, False)
-                self.statusbar.set_data(self.DATA_TAG, self.frame)
-            self.set_status(view)
+    def setup_smart_indent(self):
+        document = self.view.get_buffer()
+        if document.get_language() != None:
+            self.lang = document.get_language().get_id()
 
-        self.instances[window] = ConfigurationWindowHelper(self, window)
-
-        actions = [
-            ('SmartIndentConfiguration', None, _('Smart Indent Configuration'), '<Control><Alt><Shift>t', _("Configure smart indent settings for this language"), self.run_dialog)
-        ]
-
-        action_group = gtk.ActionGroup("TabConfigurationActions")
-        action_group.add_actions(actions, window)
-
-        self.manager = window.get_ui_manager()
-        self.manager.insert_action_group(action_group, -1)
-        self.manager.add_ui_from_string(user_interface)
-        self.setup_smart_indent(view, 'plain_text')
-
-
-    def deactivate(self, window):
-        for (handler_id, view) in self.handler_ids:
-            if view.handler_is_connected(handler_id):
-                view.disconnect(handler_id)
-
-        self.instances[window].deactivate()
-
-        if self.do_setup_statusbar_stuff:
-            self.status_label.set_text('')
-
-
-    def run_dialog(self, action, window):
-        self.instances[window].configuration_dialog()
-
-
-    def set_status(self, view):
-        if self.do_setup_statusbar_stuff:
-            if view:
-                space = view.get_insert_spaces_instead_of_tabs()
-                if space:
-                    label_str = '%s - %s Spaces'
-                else:
-                    label_str = '%s - Tabsize %s'
-                size  = view.get_tab_width()
-                language = view.get_buffer().get_language()
-                if language:
-                    lang = language.get_name()
-                else:
-                    lang = "Plain Text"
-                label = label_str % (str(lang), str(size))
-            else:
-                label=""
-            self.status_label.set_text(label)
-
-
-    def update_ui(self, window):
-        view = window.get_active_view()
-        self.set_status(view)
-        lang = 'plain_text'
-        if view:
-            buf = view.get_buffer()
-            language = buf.get_language()
-            if language:
-                lang = language.get_id()
-            self.setup_smart_indent(view, lang)
-
-
-    def setup_smart_indent(self, view, lang):
-        # Configure a "per-view" instance
-        if type(view) == gedit.View:
-            if getattr(view, 'smart_indent_instance', False) == False:
-                setattr(view, 'smart_indent_instance', SmartIndent())
-                handler_id = view.connect('key-press-event', view.smart_indent_instance.key_press_handler)
-                self.handler_ids.append((handler_id, view))
-            view.smart_indent_instance.set_language(lang, view)
-
+        if getattr(self.view, 'smart_indent_instance', False) == False:
+            setattr(self.view, 'smart_indent_instance', SmartIndent())
+            self.handler_id = self.view.connect('key-press-event', self.view.smart_indent_instance.key_press_handler)
+        self.view.smart_indent_instance.set_language(self.lang, self.view)
 
 class ConfigurationWindowHelper:
 
@@ -284,7 +212,7 @@ class ConfigurationWindowHelper:
 
 
     def configuration_dialog(self):
-        glade_xml = gtk.glade.XML(GLADE_FILE)
+        glade_xml = Gtk.Blade.add_from_file(GLADE_FILE)
         if self.dialog:
             self.dialog.set_focus(True)
             return
@@ -307,6 +235,7 @@ class ConfigurationWindowHelper:
         size    = view.get_tab_width()
 
         self.language = view.get_buffer().get_language()
+
         if self.language:
             lang_name = self.language.get_name()
             self.lang_id = self.language.get_id()
@@ -424,7 +353,6 @@ class SmartIndent:
         self.clear_variables()
         return
 
-
     def clear_variables(self):
         self.re_indent_next      = None
         self.re_unindent_curr    = None
@@ -469,7 +397,7 @@ class SmartIndent:
         cursor_iter = buf.get_iter_at_mark(buf.get_insert())
         line_start_iter = cursor_iter.copy()
         view.backward_display_line_start(line_start_iter)
-        return buf.get_text(line_start_iter, cursor_iter)
+        return buf.get_text(line_start_iter, cursor_iter, True)
 
 
     def key_press_handler(self, view, event):
@@ -488,7 +416,7 @@ class SmartIndent:
             if self.re_indent_next and self.re_indent_next.match(line):
                 old_indent = line[:len(line) - len(line.lstrip())]
                 indent = '\n'+ old_indent + indent_width
-                buf.insert_interactive_at_cursor(indent, True)
+                buf.insert_interactive_at_cursor(indent, -1, True)
                 return True
         elif keyval == 65288:
             line = self.__get_current_line(view, buf)
