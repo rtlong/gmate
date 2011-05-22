@@ -6,14 +6,15 @@
 #
 # See LICENTE.TXT for licence information
 
-from gi.repository import Gedit, GObject, Gtk
+from gi.repository import Gedit, GObject, Gtk, Gio
 import re
 import os
 
 #GLADE_FILE = os.path.join(os.path.dirname(__file__), "dialog.glade")
+settings = Gio.Settings('org.gnome.gedit.preferences.editor')
 
-DEFAULT_TAB_SIZE = 6
-DEFAULT_USE_SPACES = True
+DEFAULT_TAB_SIZE = settings.get_value('tabs-size').get_uint32()
+DEFAULT_USE_SPACES = settings.get_boolean('insert-spaces')
 
 default_indent_config = {
     "c_indent_regex"                    : r'(?!^\s*(#|//)).*(\b(if|while|for)\s*\(.*\)|\b(else|do)\b)[^{;]*$',
@@ -76,8 +77,6 @@ default_indent_config = {
     "php_indent_regex"                  : r'\s*(((if|while|else\s*(if)?|for(each)?|switch|declare)\s*\(.*\)[^{:;]*)|(do\s*[^\({:;]*))',
     "php_unindent_regex"                : r'^.*(default:\s*|case.*:.*)$',
     "php_unindent_keystrokes"           : ':',
-        
-    
     "sass_indent_regex"                 : r'(?!^\s*$)(?!^\s*(@|\+|\*|/\*|//))(^\s*?[^:=]+?(?<!,)$)',
     "sass_unindent_regex"               : r'', # XXX E.g., on blank line? (r'^\s*$')
     "sass_unindent_keystrokes"          : '',
@@ -186,21 +185,34 @@ class SmartIndentPluginView(GObject.Object, Gedit.ViewActivatable):
 
     def do_activate(self):
         self.setup_smart_indent()
-      
+
     def do_deactivate(self):
         self.view.disconnect(self.handler_id)
+        self.view.get_buffer().disconnect(self.doc_handler_id)
 
     def do_update_state(self):
-        self.setup_smart_ident()      
+        self.setup_smart_ident()
+        self.window.get_ui_manager().ensure_update()
 
     def setup_smart_indent(self):
         document = self.view.get_buffer()
-        if document.get_language() != None:
+        if document.get_language() is not None:
             self.lang = document.get_language().get_id()
-
         if getattr(self.view, 'smart_indent_instance', False) == False:
             setattr(self.view, 'smart_indent_instance', SmartIndent())
-            self.handler_id = self.view.connect('key-press-event', self.view.smart_indent_instance.key_press_handler)
+        self.register_keypress()
+        self.on_document_load()
+
+    def on_document_load(self):
+        self.doc_handler_id = self.view.get_buffer().connect('loaded', self.set_language_on_load)
+
+    def register_keypress(self):
+        self.handler_id = self.view.connect('key-press-event', self.view.smart_indent_instance.key_press_handler)
+
+    def set_language_on_load(self, doc, *args):
+        lang = doc.get_language()
+        if lang is not None:
+            self.lang = lang.get_id()
         self.view.smart_indent_instance.set_language(self.lang, self.view)
 
 class ConfigurationWindowHelper:
@@ -209,7 +221,6 @@ class ConfigurationWindowHelper:
         self.window = window
         self.plugin = plugin
         self.dialog = None
-
 
     def configuration_dialog(self):
         glade_xml = Gtk.Blade.add_from_file(GLADE_FILE)
@@ -438,7 +449,7 @@ class SmartIndent:
                         line_start_iter = cursor_iter.copy()
                         view.backward_display_line_start(line_start_iter)
                         iter_end_del = buf.get_iter_at_offset(line_start_iter.get_offset() + len(indent_width))
-                        text = buf.get_text(line_start_iter, iter_end_del)
+                        text = buf.get_text(line_start_iter, iter_end_del, True)
                         if text.strip() == '':
                             buf.delete_interactive(line_start_iter, iter_end_del, True)
                             self.__line_unindented = self.__line_no

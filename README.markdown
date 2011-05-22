@@ -1,44 +1,31 @@
-# GMate
+# GMate - Gedit 3
+
+### *NOTE*: I'm updating some of the scripts and plugins for use with GNOME 3.
+
+**Due GSettings need of complied schemas, there's no easy way to provide plugin configuration right now. The GNOME devs are looking into this.** See <https://bugzilla.gnome.org/show_bug.cgi?id=649717> for more info.
+
+Migrated right now (without support for settings):
+
+* FuzzyOpen (using GeditMessageBus to connect to filebrowser)
+* Rails File Loader
+* Zencoding
+* Smart Indent
+* Find In Files
+* Text Tools (need some reword on accels to not conflict with multiedit)
+
+Removed plugins:
+
+* Gemini: there's a oficial plugin named Brack Completion that does the job. In ArchLinux it's available on the gedit-plugins package
+* Word completion: Same as above
+* Multiedit: same as above
+
 
 This package contains some gedit improvements to make it more similar to
 TextMate. The package contain code snippets, plugins, and an automatic
 registration of rails-related files.
 
 If you have issues with one of the plugins included in Gmate or have suggestions
-please fill an issue in <http://github.com/gmate/gmate/issues>
-
-## Install
-
-### Ubuntu
-
-1. Add Ubuntu on Rails PPA:
-
-        sudo apt-add-repository ppa:ubuntu-on-rails/ppa
-        sudo apt-get update
-
-   *Note:* on Karmic use `add-apt-repository` instead of `apt-add-repository`.
-2. Install gedit-gmate package:
-
-        sudo apt-get install gedit-gmate
-
-### Other Linux
-
-1. Install all dependencies:
-    * `python-webkitgtk` for Todo-List plugin and Find in Project plugin, see
-      <http://code.google.com/p/pywebkitgtk>
-    * `python-sexy` for Go to File plugin
-    * `pyinotify` for Gedit Open Files and SnapOpen plugins.
-    * `ack-grep` for faster search in Find in Project. (optional)
-2. Download gmate sources or clone git repository:
-
-        git clone git://github.com/gmate/gmate.git
-        cd gmate
-
-3. And run install script:
-
-        sh install.sh
-
-   **Note:** Some commands will expect you enter your sudo password.
+please fill an issue in <http://github.com/mereghost/gmate/issues>
 
 ## GMate package include
 
