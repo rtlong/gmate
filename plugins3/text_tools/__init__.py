@@ -54,7 +54,7 @@ class TextToolsWindow(GObject.Object, Gedit.WindowActivatable):
         # ('LowerLine',           None, 'Move Line Down',     '<Alt>Down',         'Transpose the current line with the line below it',             self.lower_line),
         actions = [
             ('TextTools',           None, 'Text Tools'),
-            ('ClearLine',           None, 'Clear Line',         '<Shift><Control>r', 'Remove all the characters on the current line',                 self.clear_line),
+            ('ClearLine',           None, 'Clear Line',         '<Shift><Control>c', 'Remove all the characters on the current line',                 self.clear_line),
             ('DuplicateLine',       None, 'Duplicate Line',     '<Shift><Control>d', 'Create a duplicate of the current line below the current line', self.duplicate_line),
             ('SelectEnclosed',      None, 'Select Enclosed Text','<Alt><Control>9',  'Select the content between enclose chars, quotes or tags',      self.select_enclosed),
             ('SelectWord',          None, 'Select Word',        '<Alt>W',            'Select the word located under cursor',                          self.select_word),

@@ -1,6 +1,20 @@
 # GMate - Gedit 3
 
 ### *NOTE*: I'm updating some of the scripts and plugins for use with GNOME 3.
+<<<<<<< HEAD
+=======
+
+This package contains some gedit improvements to make it more similar to
+TextMate. The package contain code snippets, plugins, and an automatic
+registration of rails-related files.
+
+If you have issues with one of the plugins included in Gmate or have suggestions
+please fill an issue in <http://github.com/gmate/gmate/issues>
+
+## Install
+
+### Ubuntu
+>>>>>>> f9db4b85e7eccafd5fc4b645ec99791134b755c2
 
 **Due GSettings need of complied schemas, there's no easy way to provide plugin configuration right now. The GNOME devs are looking into this.** See <https://bugzilla.gnome.org/show_bug.cgi?id=649717> for more info.
 

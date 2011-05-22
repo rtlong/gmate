@@ -261,9 +261,10 @@ class PairCompletionPlugin(gedit.Plugin):
         handled = self.auto_close_paren(doc, ch)
     if not handled and self.is_ctrl_enter(event):
       # Handle Ctrl+Return and Ctrl+Shift+Return
-      text_to_insert = NEWLINE_CHAR + self.get_current_line_indent(doc)
-      if event.state & gtk.gdk.SHIFT_MASK:
-        text_to_insert = self.get_stmt_terminator(doc) + text_to_insert
+      #text_to_insert = NEWLINE_CHAR + self.get_current_line_indent(doc)
+      text_to_insert = ' '
+      #if event.state & gtk.gdk.SHIFT_MASK:
+        #text_to_insert = self.get_stmt_terminator(doc) + text_to_insert
       self.move_to_end_of_line_and_insert(doc, text_to_insert)
       view.scroll_mark_onscreen(doc.get_insert())
       handled = True
