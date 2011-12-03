@@ -1,3 +1,65 @@
+gedit-gmate (0.10~uorppa4) oneiric; urgency=low
+  * Rewrite build script to support Restore Tab plugin.
+
+ -- Andrey Sitnik <andrey@sitnik.ru>  Fri, 18 Nov 2011 02:01:51 +0900
+
+gedit-gmate (0.10~uorppa2) oneiric; urgency=low
+  * Add dependences for Restore Tabs.
+
+ -- Andrey Sitnik <andrey@sitnik.ru>  Thu, 17 Nov 2011 21:52:04 +0900
+
+gedit-gmate (0.10~uorppa1) oneiric; urgency=low
+  * Add Snapopen plugin for gedit 3.
+  * Add Whitespace Terminator plugin for gedit3.
+  * Add Smart Highlight plugin for gedit3.
+  * Add Restore Tabs plugin for gedit3
+  * Add Pair Char Completion plugin for gedit3.
+  * Add TabSwitch plugin for gedit 3.
+  * Fix install script for gedit3.
+  * Fix factorygirl snippets.
+  * Add yet another railscasts style.
+  * Updated and improved rubyonrails snippets.
+
+ -- Andrey Sitnik <andrey@sitnik.ru>  Tue, 15 Nov 2011 14:06:33 +0700
+
+gedit-gmate (0.10~uorppa0) oneiric; urgency=low
+  * Support for gedit 3.
+
+ -- Andrey Sitnik <andrey@sitnik.ru>  Sun, 02 Oct 2011 02:20:19 +0400
+
+gedit-gmate (0.9.20~uorppa0) natty; urgency=low
+  * Add Highlight Edited Lines plugin.
+  * Add Text Map plugin.
+  * Add Simple Folding plugin.
+  * Add Multi Terminal plugin.
+  * Add MIME detection for RABL templetes.
+  * Add JS support to RHTML highlight.
+  * Add 'smart def' snippet for python.
+  * Fix rspec:capybara:background snippet.
+
+ -- Andrey Sitnik <andrey@sitnik.ru>  Wed, 28 Sep 2011 23:31:15 +0400
+
+gedit-gmate (0.9.19~uorppa0) natty; urgency=low
+  * Replace plugin “Align” by “Align columns”.
+  * Add Zoom plugin.
+  * Add licenses snippets.
+  * Add snippets for Django.
+  * Add rspec capybara snippets: feature, background and scenario.
+  * Fix quote escape in CoffeeScript highlighting.
+  * Fixed typo in Cucumber language file.
+
+ -- Andrey Sitnik <andrey@sitnik.ru>  Thu, 30 Jun 2011 13:06:30 +0400
+
+gedit-gmate (0.9.18~uorppa0) natty; urgency=low
+  * Update File Search plugin to use German, French and Russian localization.
+  * Add Indent Converter plugin.
+  * Add .gemspec to Ruby MIME type.
+  * Improved CoffeeScript support.
+  * Add Haml to Smart Indent config.
+  * Fix HTML, XML and JS tab size in Smart Indent config.
+
+ -- Andrey Sitnik <andrey@sitnik.ru>  Sun, 29 May 2011 13:23:20 +0400
+
 gedit-gmate (0.9.17~uorppa0) natty; urgency=low
   * Add Reopen Tabs plugin.
   * Update Gemini plugin to support gedit 2.30.3.

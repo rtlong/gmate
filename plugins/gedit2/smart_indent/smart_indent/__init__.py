@@ -91,7 +91,7 @@ default_indent_config = {
     "javascript_unindent_regex"         : r'^.*(default:\s*|case.*:.*)$',
     "javascript_unindent_keystrokes"    : ':',
     "javascript_use_space"              : True,
-    "javascript_tab_size"               : 2,
+    "javascript_tab_size"               : 4,
 
     "rhtml_indent_regex"                : r'',
     "rhtml_unindent_regex"              : r'',
@@ -103,24 +103,36 @@ default_indent_config = {
     "xml_unindent_regex"                : r'',
     "xml_unindent_keystrokes"           : '',
     "xml_use_space"                     : True,
-    "xml_tab_size"                      : 2,
+    "xml_tab_size"                      : 4,
 
     "html_indent_regex"                 : r'',
     "html_unindent_regex"               : r'',
     "html_unindent_keystrokes"          : '',
     "html_use_space"                    : True,
-    "html_tab_size"                     : 2,
+    "html_tab_size"                     : 4,
 
     "php_indent_regex"                  : r'\s*(((if|while|else\s*(if)?|for(each)?|switch|declare)\s*\(.*\)[^{:;]*)|(do\s*[^\({:;]*))',
     "php_unindent_regex"                : r'^.*(default:\s*|case.*:.*)$',
     "php_unindent_keystrokes"           : ':',
-        
+    
+    "haml_indent_regex"                 : r'',
+    "haml_unindent_regex"               : r'',
+    "haml_unindent_keystrokes"          : '',
+    "haml_use_space"                    : True,
+    "haml_tab_size"                     : 2,
     
     "sass_indent_regex"                 : r'(?!^\s*$)(?!^\s*(@|\+|\*|/\*|//))(^\s*?[^:=]+?(?<!,)$)',
     "sass_unindent_regex"               : r'', # XXX E.g., on blank line? (r'^\s*$')
     "sass_unindent_keystrokes"          : '',
     "sass_use_space"                    : True,
-    "sass_tab_size"                     : 2
+    "sass_tab_size"                     : 2,
+    
+    # Regex taken from jEdit CoffeeScript mode, kudos to Dennis Hotson and Balazs Toth https://github.com/dhotson/coffeescript-jedit
+    "coffee_indent_regex"                 : r'(?!^\s*$)(?!^\s*(@|\+|\*|/\*|//))(^\s*?[^:=]+?(?<!,)$)',
+    "coffee_unindent_regex"               : r'^\s*(else|catch|finally)(\s*|\s+.*)$',
+    "coffee_unindent_keystrokes"          : '',
+    "coffee_use_space"                    : True,
+    "coffee_tab_size"                     : 2
 }
 
 

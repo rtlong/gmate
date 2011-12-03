@@ -14,6 +14,10 @@
     <glob pattern="*.rjs"/>
   </mime-type>
   <mime-type type="application/x-ruby">
+    <comment>RubyGems gem specification</comment>
+    <glob pattern="*.gemspec"/>
+  </mime-type>
+  <mime-type type="application/x-ruby">
     <comment>Ruby Rakefile</comment>
     <glob pattern="Rakefile"/>
   </mime-type>
@@ -45,6 +49,10 @@
     <comment>Ruby XML Template</comment>
     <glob pattern="*.rxml"/>
     <glob pattern="*.builder"/>
+  </mime-type>
+  <mime-type type="application/x-ruby">
+    <comment>Ruby API Builder Language template</comment>
+    <glob pattern="*.rabl"/>
   </mime-type>
   <mime-type type="text/x-yaml">
     <comment>YAML Ain't Markup Language</comment>

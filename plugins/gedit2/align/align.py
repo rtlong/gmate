@@ -23,7 +23,6 @@ import gedit
 import gtk
 import gtk.glade
 import os
-import gconf
 
 
 UI = """
@@ -31,14 +30,12 @@ UI = """
   <menubar name="MenuBar">
     <menu name="EditMenu" action="Edit">
       <placeholder name="EditOps_6">
-        <menuitem name="Align" action="AlignColumns"/>
+        <menuitem name="Align" action="Align"/>
       </placeholder>
     </menu>
   </menubar>
 </ui>"""
 
-
-gconf_base_uri = u'/apps/gedit-2/plugins/align_columns'
 
 class AlignDialog(object):
 
@@ -54,29 +51,19 @@ class AlignDialog(object):
         self.dialog.set_transient_for(parent)
         self.dialog.set_default_response(gtk.RESPONSE_OK)
 
-        self._config = gconf.client_get_default()
-        self._config.add_dir(gconf_base_uri, gconf.CLIENT_PRELOAD_NONE)
-
-
     def destroy(self):
         """Destroy the dialog."""
+
         return self.dialog.destroy()
 
     def get_separator(self):
         """Get separator."""
-        separator = self.entry.get_text()
-        # Save separator for next use
-        self._config.set_string(
-            os.path.join(gconf_base_uri,'last_separator'), separator)
-        return separator
 
+        return self.entry.get_text()
 
     def run(self):
         """Show and run the dialog."""
-        last_used = self._config.get_string(
-            os.path.join(gconf_base_uri,'last_separator'))
-        if last_used:
-            self.entry.set_text(last_used)
+
         self.dialog.show()
         return self.dialog.run()
 
@@ -99,10 +86,10 @@ class AlignPlugin(gedit.Plugin):
         self.window = window
         self.action_group = gtk.ActionGroup('AlignPluginActions')
         self.action_group.add_actions([(
-            'AlignColumns',
+            'Align',
             None,
             _('Ali_gn...'),
-            "<Shift><Alt>A",
+            None,
             _('Align the selected text to columns'),
             self.on_align_activate
         )])
@@ -118,7 +105,6 @@ class AlignPlugin(gedit.Plugin):
 
         # Split text to rows and columns.
         # Ignore lines that don't match splitter.
-        # TODO: Teste here to ignore separator inside a quoted string
         matrix = []
         for i in reversed(range(len(lines))):
             line_start = doc.get_iter_at_line(lines[i])
@@ -175,7 +161,7 @@ class AlignPlugin(gedit.Plugin):
         uim = window.get_ui_manager()
         uim.remove_ui(self.ui_id)
         uim.remove_action_group(self.action_group)
-        # uim.ensure_update()
+        uim.ensure_update()
 
         self.action_group = None
         self.ui_id = None
@@ -200,4 +186,3 @@ class AlignPlugin(gedit.Plugin):
 
         doc = self.window.get_active_document()
         self.action_group.set_sensitive(doc is not None)
-
